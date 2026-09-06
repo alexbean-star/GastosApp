@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Mis Gastos</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Presupuesto de la quincena (siempre visible) -->
+  <section class="budget-bar">
+    <div class="container">
+      <div class="budget-top">
+        <div>
+          <span class="budget-label">Disponible en la quincena</span>
+          <span class="budget-available" id="disponible">$0.00</span>
+        </div>
+        <div class="budget-buttons">
+          <button id="btnEditarPresupuesto" class="btn-small" type="button">Editar</button>
+          <button id="btnNuevaQuincena" class="btn-small btn-quincena" type="button">Nueva quincena</button>
+          <button id="btnReiniciar" class="btn-small btn-reset" type="button">Reiniciar</button>
+        </div>
+      </div>
+      <div class="budget-progress">
+        <div class="budget-progress-fill" id="barraProgreso"></div>
+      </div>
+      <div class="budget-meta">
+        <span id="gastadoQuincena">Descontado: $0.00</span>
+        <span id="presupuestoQuincena">Presupuesto: $0.00</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pestañas -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="gastos">📋 Gastos</button>
+    <button class="tab" data-tab="efectivo">💵 Efectivo</button>
+    <button class="tab" data-tab="debito">💳 Débito</button>
+    <button class="tab" data-tab="credito">💳 Crédito</button>
+    <button class="tab" data-tab="guardadito">🐷 Guardadito</button>
+  </nav>
+
+  <main class="container">
+    <!-- ===== PESTAÑA GASTOS ===== -->
+    <div class="tab-panel active" id="panel-gastos">
+      <section class="summary">
+        <div class="summary-card total">
+          <span class="summary-label">Total gastado</span>
+          <span class="summary-value" id="totalGasto">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Gastos registrados</span>
+          <span class="summary-value" id="cantidadGastos">0</span>
+        </div>
+      </section>
+
+      <section class="card" id="cardFormGasto">
+        <h2 id="tituloFormGasto">Agregar gasto</h2>
+        <div class="edit-banner" id="bannerEdicion">
+          <span>✏️ Editando un gasto</span>
+          <button type="button" class="btn-cancel" id="btnCancelarEdicion">Cancelar</button>
+        </div>
+        <form id="formGasto" autocomplete="off">
+          <div class="field">
+            <label for="descripcion">Descripción</label>
+            <input type="text" id="descripcion" placeholder="Ej: Supermercado" required />
+          </div>
+
+          <div class="field">
+            <label for="monto">Monto</label>
+            <input type="number" id="monto" placeholder="0.00" step="0.01" min="0" required />
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="categoria">Categoría</label>
+              <select id="categoria">
+                <option value="Comida">🍔 Comida</option>
+                <option value="Transporte">🚗 Transporte</option>
+                <option value="Compras">🛍️ Compras</option>
+                <option value="Servicios">💡 Servicios</option>
+                <option value="Salud">🏥 Salud</option>
+                <option value="Ocio">🎮 Ocio</option>
+                <option value="Otros">📦 Otros</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="metodoPago">Pago con</label>
+              <select id="metodoPago">
+                <option value="Efectivo">💵 Efectivo</option>
+                <!-- Cuentas de débito y tarjetas de crédito se agregan dinámicamente -->
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" required />
+          </div>
+
+          <button type="submit" class="btn-primary" id="btnSubmitGasto">Agregar gasto</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="list-header collapsible" id="toggleHistorial">
+          <h2>Historial <span class="collapse-arrow" id="flechaHistorial">▶</span></h2>
+          <button id="btnLimpiar" class="btn-text" type="button">Borrar todo</button>
+        </div>
+        <div id="contenedorHistorial" hidden>
+          <div id="listaGastos" class="expense-list"></div>
+          <p id="mensajeVacio" class="empty">Aún no hay gastos. ¡Agrega el primero! 👆</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== PESTAÑA EFECTIVO ===== -->
+    <div class="tab-panel" id="panel-efectivo">
+      <section class="summary">
+        <div class="summary-card total">
+          <span class="summary-label">Efectivo disponible</span>
+          <span class="summary-value" id="totalEfectivo">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Gastado en efectivo</span>
+          <span class="summary-value" id="gastadoEfectivo">$0.00</span>
+        </div>
+      </section>
+      <section class="card">
+        <div class="list-header collapsible" id="toggleEfectivo">
+          <h2>Movimientos en efectivo <span class="collapse-arrow" id="flechaEfectivo">▼</span></h2>
+        </div>
+        <div id="contenedorEfectivo">
+          <div id="listaEfectivo" class="expense-list"></div>
+          <p id="mensajeSinEfectivo" class="empty">Aún no hay movimientos en efectivo.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- ===== PESTAÑA DÉBITO ===== -->
+    <div class="tab-panel" id="panel-debito">
+      <section class="card">
+        <h2>Agregar cuenta de débito</h2>
+        <form id="formDebito" autocomplete="off">
+          <div class="field">
+            <label for="nombreDebito">Nombre de la cuenta</label>
+            <input type="text" id="nombreDebito" placeholder="Ej: Cuenta BBVA" required />
+          </div>
+          <div class="field">
+            <label for="saldoDebito">Saldo actual (dinero que tienes)</label>
+            <input type="number" id="saldoDebito" placeholder="0.00" step="0.01" min="0" required />
+          </div>
+          <button type="submit" class="btn-primary">Agregar cuenta</button>
+        </form>
+      </section>
+      <section>
+        <div id="listaDebito" class="card-list"></div>
+        <p id="mensajeSinDebito" class="empty">Aún no tienes cuentas de débito. Agrega la primera 👆</p>
+      </section>
+    </div>
+
+    <!-- ===== PESTAÑA CRÉDITO ===== -->
+    <div class="tab-panel" id="panel-credito">
+      <section class="card">
+        <h2>Agregar tarjeta de crédito</h2>
+        <form id="formTarjeta" autocomplete="off">
+          <div class="field">
+            <label for="nombreTarjeta">Nombre de la tarjeta</label>
+            <input type="text" id="nombreTarjeta" placeholder="Ej: Visa Banco X" required />
+          </div>
+          <button type="submit" class="btn-primary">Agregar tarjeta</button>
+        </form>
+      </section>
+      <section>
+        <div id="listaTarjetas" class="card-list"></div>
+        <p id="mensajeSinTarjetas" class="empty">Aún no tienes tarjetas. Agrega la primera 👆</p>
+      </section>
+    </div>
+
+    <!-- ===== PESTAÑA GUARDADITO ===== -->
+    <div class="tab-panel" id="panel-guardadito">
+      <section class="summary">
+        <div class="summary-card total">
+          <span class="summary-label">Total ahorrado</span>
+          <span class="summary-value" id="totalAhorrado">$0.00</span>
+        </div>
+        <div class="summary-card">
+          <span class="summary-label">Rendimiento hoy</span>
+          <span class="summary-value" id="rendimientoHoy">$0.00</span>
+        </div>
+      </section>
+      <section class="card">
+        <h2>Agregar cuenta de ahorro</h2>
+        <form id="formAhorro" autocomplete="off">
+          <div class="field">
+            <label for="nombreAhorro">Nombre de la cuenta</label>
+            <input type="text" id="nombreAhorro" placeholder="Ej: Cuenta Nu" required />
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="saldoAhorro">Saldo actual</label>
+              <input type="number" id="saldoAhorro" placeholder="0.00" step="0.01" min="0" required />
+            </div>
+            <div class="field">
+              <label for="tasaAhorro">Rend. anual hasta el tope (%)</label>
+              <input type="number" id="tasaAhorro" placeholder="Ej: 12" step="0.01" min="0" required />
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label for="topeAhorro">Tope que genera rendimiento</label>
+              <input type="number" id="topeAhorro" placeholder="Ej: 25000 (0 = sin tope)" step="0.01" min="0" />
+            </div>
+            <div class="field">
+              <label for="tasaExcedenteAhorro">Rend. anual sobre excedente (%)</label>
+              <input type="number" id="tasaExcedenteAhorro" placeholder="Ej: 6" step="0.01" min="0" />
+            </div>
+          </div>
+          <button type="submit" class="btn-primary">Agregar cuenta</button>
+        </form>
+      </section>
+      <section>
+        <div id="listaAhorro" class="card-list"></div>
+        <p id="mensajeSinAhorro" class="empty">Aún no tienes cuentas de ahorro. Agrega la primera 👆</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===== Modal de transferencia ===== -->
+  <div class="modal-overlay" id="modalTransfer" hidden>
+    <div class="modal">
+      <h2>Transferencia</h2>
+      <p class="modal-origen" id="transferOrigen"></p>
+      <form id="formTransfer" autocomplete="off">
+        <div class="field">
+          <label for="transferTipo">Tipo de transferencia</label>
+          <select id="transferTipo">
+            <option value="interna">A una cuenta mía (no descuenta)</option>
+            <option value="ahorro">A Guardadito / ahorro (descuenta)</option>
+            <option value="persona">A una persona (descuenta)</option>
+            <option value="retiro">Retiro de dinero (no descuenta)</option>
+          </select>
+        </div>
+
+        <div class="field" id="campoDestinoCuenta">
+          <label for="transferDestino">Cuenta destino</label>
+          <select id="transferDestino"></select>
+        </div>
+
+        <div class="field" id="campoConcepto" hidden>
+          <label for="transferConcepto">Concepto / a quién</label>
+          <input type="text" id="transferConcepto" placeholder="Ej: A mi mamá" />
+        </div>
+
+        <div class="field">
+          <label for="transferMonto">Monto</label>
+          <input type="number" id="transferMonto" placeholder="0.00" step="0.01" min="0" required />
+        </div>
+
+        <div class="field">
+          <label for="transferFecha">Fecha</label>
+          <input type="date" id="transferFecha" required />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel-modal" id="btnCancelarTransfer">Cancelar</button>
+          <button type="submit" class="btn-primary">Registrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== Modal de transferencia de Guardadito ===== -->
+  <div class="modal-overlay" id="modalTransferAhorro" hidden>
+    <div class="modal">
+      <h2>Transferir desde ahorro</h2>
+      <p class="modal-origen" id="transferAhorroOrigen"></p>
+      <form id="formTransferAhorro" autocomplete="off">
+        <div class="field">
+          <label for="transferAhorroTipo">Transferir a</label>
+          <select id="transferAhorroTipo">
+            <option value="debito">Una cuenta de débito (suma a la quincena)</option>
+            <option value="ahorro">Otra cuenta de ahorro</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="transferAhorroDestino">Cuenta destino</label>
+          <select id="transferAhorroDestino"></select>
+        </div>
+
+        <div class="field" id="campoConceptoAhorro">
+          <label for="transferAhorroConcepto">Concepto (¿por qué sacas el dinero?)</label>
+          <input type="text" id="transferAhorroConcepto" placeholder="Ej: Emergencia, pago renta..." />
+        </div>
+
+        <div class="field">
+          <label for="transferAhorroMonto">Monto</label>
+          <input type="number" id="transferAhorroMonto" placeholder="0.00" step="0.01" min="0" required />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel-modal" id="btnCancelarTransferAhorro">Cancelar</button>
+          <button type="submit" class="btn-primary">Transferir</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

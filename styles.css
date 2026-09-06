@@ -1,0 +1,751 @@
+:root {
+  --primary: #6366f1;
+  --primary-dark: #312e81;
+  --bg: #0f172a;
+  --card: #1e293b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --danger: #ef4444;
+  --success: #10b981;
+  --border: #334155;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding-bottom: 40px;
+  color-scheme: dark;
+}
+
+.container {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Resumen */
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.summary-card.total {
+  background: var(--primary);
+  color: #fff;
+}
+
+.summary-label {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+/* Tarjetas */
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.card h2 {
+  font-size: 1.1rem;
+  margin-bottom: 14px;
+}
+
+/* Formulario */
+.field {
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #0f172a;
+  color: var(--text);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 14px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-primary:active {
+  background: var(--primary-dark);
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--danger);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* Lista */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.list-header.collapsible {
+  cursor: pointer;
+  user-select: none;
+}
+
+.collapse-arrow {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-left: 4px;
+}
+
+.list-header h2 {
+  margin-bottom: 0;
+}
+
+.expense-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.expense-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #0f172a;
+  border: 1px solid var(--border);
+}
+
+.expense-icon {
+  font-size: 1.5rem;
+}
+
+.expense-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.expense-desc {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.expense-meta {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.expense-amount {
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.expense-amount.entrada {
+  color: var(--success);
+}
+
+.expense-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.expense-edit,
+.expense-delete {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+.expense-edit {
+  color: var(--primary);
+}
+
+.expense-delete {
+  color: var(--danger);
+}
+
+/* Formulario en modo edición */
+.card.editing {
+  border: 2px solid var(--primary);
+}
+
+.edit-banner {
+  display: none;
+  background: #312e81;
+  color: #e0e7ff;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.edit-banner.visible {
+  display: flex;
+}
+
+.btn-cancel {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 20px 0;
+  font-size: 0.9rem;
+}
+
+/* Categorías */
+.cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cat-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cat-row:last-child {
+  border-bottom: none;
+}
+
+.cat-amount {
+  font-weight: 600;
+}
+
+/* ===== Barra de presupuesto quincenal ===== */
+.budget-bar {
+  background: var(--primary-dark);
+  color: #fff;
+  padding: 14px 0;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.budget-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.budget-label {
+  display: block;
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.budget-available {
+  display: block;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.budget-available.negativo {
+  color: #fca5a5;
+}
+
+.btn-small {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.budget-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.btn-reset {
+  background: rgba(239, 68, 68, 0.85);
+}
+
+.btn-quincena {
+  background: rgba(16, 185, 129, 0.9);
+}
+
+.budget-progress {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  margin: 10px 0 6px;
+  overflow: hidden;
+}
+
+.budget-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--success);
+  border-radius: 6px;
+  transition: width 0.3s ease, background 0.3s;
+}
+
+.budget-progress-fill.warning {
+  background: #f59e0b;
+}
+
+.budget-progress-fill.danger {
+  background: var(--danger);
+}
+
+.budget-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+/* ===== Pestañas ===== */
+.tabs {
+  display: flex;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0; /* se ajusta dinámicamente con JS a la altura de la barra de saldo */
+  z-index: 15;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab {
+  flex: 1 0 auto;
+  padding: 14px 12px;
+  background: none;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* ===== Lista de tarjetas ===== */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.credit-card {
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  color: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(67, 56, 202, 0.3);
+}
+
+.credit-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.credit-card-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.credit-card-total {
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin-top: 8px;
+}
+
+.credit-card-amount {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.credit-card-amount.negativo-amount {
+  color: #fecaca;
+}
+
+.credit-card-sub {
+  font-size: 0.78rem;
+  opacity: 0.85;
+  margin-top: 6px;
+}
+
+/* Bloque de disponible de la quincena dentro de una cuenta (Azteca) */
+.card-quincena {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+
+.card-quincena strong {
+  font-size: 1.1rem;
+}
+
+.card-quincena strong.negativo {
+  color: #fecaca;
+}
+
+.card-quincena.solo-cuenta {
+  margin-top: 8px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Variantes de color por tipo de cuenta */
+.credit-card.debito {
+  background: linear-gradient(135deg, #0ea5e9, #0369a1);
+  box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
+}
+
+.credit-card.ahorro {
+  background: linear-gradient(135deg, #10b981, #047857);
+  box-shadow: 0 4px 12px rgba(4, 120, 87, 0.3);
+}
+
+/* ===== Distintivo (badge) del banco ===== */
+.bank-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ===== Colores por banco (tarjetas de crédito) ===== */
+.credit-card.banco-santander {
+  background: linear-gradient(135deg, #ec0000, #a30000);
+  box-shadow: 0 4px 12px rgba(163, 0, 0, 0.35);
+}
+.credit-card.banco-santander .bank-badge {
+  color: #ec0000;
+}
+
+.credit-card.banco-banamex {
+  background: linear-gradient(135deg, #0047ba, #002d75);
+  box-shadow: 0 4px 12px rgba(0, 45, 117, 0.35);
+}
+.credit-card.banco-banamex .bank-badge {
+  color: #0047ba;
+}
+
+.credit-card.banco-bbva {
+  background: linear-gradient(135deg, #072146, #004481);
+  box-shadow: 0 4px 12px rgba(7, 33, 70, 0.35);
+}
+.credit-card.banco-bbva .bank-badge {
+  color: #004481;
+}
+
+.credit-card.banco-banorte {
+  background: linear-gradient(135deg, #eb0029, #8b0019);
+  box-shadow: 0 4px 12px rgba(139, 0, 25, 0.35);
+}
+.credit-card.banco-banorte .bank-badge {
+  color: #eb0029;
+}
+
+.credit-card.banco-hsbc {
+  background: linear-gradient(135deg, #db0011, #8b0009);
+  box-shadow: 0 4px 12px rgba(139, 0, 9, 0.35);
+}
+.credit-card.banco-hsbc .bank-badge {
+  color: #db0011;
+}
+
+.credit-card.banco-azteca {
+  background: linear-gradient(135deg, #009640, #00662b);
+  box-shadow: 0 4px 12px rgba(0, 102, 43, 0.35);
+}
+.credit-card.banco-azteca .bank-badge {
+  color: #009640;
+}
+
+.credit-card.banco-nu {
+  background: linear-gradient(135deg, #820ad1, #5a0894);
+  box-shadow: 0 4px 12px rgba(90, 8, 148, 0.35);
+}
+.credit-card.banco-nu .bank-badge {
+  color: #820ad1;
+}
+
+.credit-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* Detalle de gastos dentro de la tarjeta */
+.card-detail-toggle {
+  margin-top: 14px;
+}
+
+.card-detail-toggle summary {
+  cursor: pointer;
+  font-size: 0.82rem;
+  padding: 6px 0;
+  opacity: 0.9;
+  list-style: none;
+}
+
+.card-detail-toggle summary::-webkit-details-marker {
+  display: none;
+}
+
+.card-detail-toggle summary::before {
+  content: "▶ ";
+  font-size: 0.7rem;
+}
+
+.card-detail-toggle[open] summary::before {
+  content: "▼ ";
+}
+
+.card-detail {
+  margin-top: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 6px 10px;
+}
+
+.card-detail-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.card-detail-row:last-child {
+  border-bottom: none;
+}
+
+.cd-desc {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cd-amount {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.cd-amount.entrada {
+  color: #bbf7d0;
+}
+
+.cd-del {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 2px 4px;
+}
+
+.card-detail-empty {
+  margin-top: 14px;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.btn-card {
+  flex: 1;
+  padding: 10px 4px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--primary-dark);
+}
+
+.btn-card.pay {
+  background: var(--success);
+  color: #fff;
+}
+
+.btn-card.pay:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-card.delete {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  flex: 0 0 auto;
+  padding: 10px 12px;
+}
+
+/* ===== Modal de transferencia ===== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal-overlay[hidden] {
+  display: none;
+}
+
+.modal {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 22px;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal h2 {
+  margin-bottom: 4px;
+}
+
+.modal-origen {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.modal-actions .btn-primary {
+  flex: 1;
+}
+
+.btn-cancel-modal {
+  flex: 0 0 auto;
+  padding: 14px 18px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
